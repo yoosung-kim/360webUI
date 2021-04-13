@@ -1,0 +1,35 @@
+<video id="player" controls autoplay></video><br><br>
+<button id="capture" style="width:100px;height:50px">CAPTURE!</button>&nbsp;
+<input id="name" style="width:300px;height:50px">&nbsp;
+<a href="#" id="downloader" download="image.png">DOWNLOAD!</a><br>
+<canvas id="snapshot" width=320 height=240></canvas><br>
+<script>
+  var player = document.getElementById('player'); 
+  var snapshotCanvas = document.getElementById('snapshot');
+  var captureButton = document.getElementById('capture');
+  var download = document.getElementById('downloader');
+  var videoTracks;
+
+  var handleSuccess = function(stream) {
+    // Attach the video stream to the video element and autoplay.
+    player.srcObject = stream;
+    videoTracks = stream.getVideoTracks();
+  };
+
+  
+  download.addEventListener('click', function() {
+    document.getElementById("downloader").download = document.getElementById("name").value + ".png";
+    document.getElementById("downloader").href = document.getElementById("snapshot").toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+  });
+  
+  captureButton.addEventListener('click', function() {
+    var context = snapshot.getContext('2d');
+    context.drawImage(player, 0, 0, snapshotCanvas.width, snapshotCanvas.height);
+	
+    // Stop all video streams.
+    //videoTracks.forEach(function(track) {track.stop()});
+  });
+
+  navigator.mediaDevices.getUserMedia({video: true})
+      .then(handleSuccess);
+</script>
